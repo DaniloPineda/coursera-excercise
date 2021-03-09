@@ -3,12 +3,13 @@ import Menu from './MenuComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
-import Contact from './ContactComponent'
+import Contact from './ContactComponent';
+import DishDetail from './DishdetailComponent';
 import { Component } from 'react';
-import { DISHES } from '../shared/dishes'
-import { PROMOTIONS } from '../shared/promotions'
-import { LEADERS } from '../shared/leaders'
-import { COMMENTS } from '../shared/comments'
+import { DISHES } from '../shared/dishes';
+import { PROMOTIONS } from '../shared/promotions';
+import { LEADERS } from '../shared/leaders';
+import { COMMENTS } from '../shared/comments';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 class Main extends Component {
@@ -28,9 +29,19 @@ class Main extends Component {
   render() {
     const HomePage = () =>{
       return(
-        <Home dish={this.state.dishes.filter(d => d.featured)[0]}
-              promotion ={this.state.promotions.filter(p => p.featured)[0]}
-              leader ={this.state.leaders.filter(l => l.featured)[0]}
+        <Home
+          dish={this.state.dishes.filter(d => d.featured)[0]}
+          promotion ={this.state.promotions.filter(p => p.featured)[0]}
+          leader ={this.state.leaders.filter(l => l.featured)[0]}
+        />
+      )
+    }
+  
+    const DishWithId = ({match}) => {
+      return(
+        <DishDetail 
+          dish={this.state.dishes.filter(d => d.id === parseInt(match.params.dishId,10))[0]} 
+          comments={this.state.comments.filter(c => c.dishId === parseInt(match.params.dishId,10))}
         />
       )
     }
@@ -41,6 +52,7 @@ class Main extends Component {
       <Switch>
         <Route path="/home" component={HomePage} />
         <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes}/>} />
+        <Route path="/menu/:dishId" component={DishWithId} />
         <Route exact path="/contactus" component={Contact} />
         <Redirect to="/home"/>
       </Switch>
