@@ -66,7 +66,7 @@ class Contact extends Component {
         if(this.state.touched.telnum && !reg.test(telnum))
             errors.telnum = "Tel Number should contain only numbers";
         
-        if(this.state.touched.email && email.split('').filter(e => e === '@').length != 1)
+        if(this.state.touched.email && email.split('').filter(e => e === '@').length !== 1)
             errors.email = "email should contain a @";
 
         return errors;
@@ -108,7 +108,7 @@ class Contact extends Component {
                     <div className="col-12 col-sm-11 offset-sm-1">
                         <div className="btn-group" role="group">
                             <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-                            <a role="button" className="btn btn-info"><i className="fa fa-skype"></i> Skype</a>
+                            <a role="button" className="btn btn-info" href="/"><i className="fa fa-skype"></i> Skype</a>
                             <a role="button" className="btn btn-success" href="mailto:danilo.pineda@pevaar.com"><i className="fa fa-envelope-o"></i> Email</a>
                         </div>
                     </div>
@@ -126,7 +126,7 @@ class Contact extends Component {
                                             onBlur = {this.handleBlur('firstname')}
                                             onChange = {this.handleInputChange}
                                             valid={errors.firstname === ''}
-                                            invalid={errors.firstname != ''}
+                                            invalid={errors.firstname !== ''}
                                             placeholder="First Name" value={this.state.firstname} />
                                     <FormFeedback>{errors.firstname}</FormFeedback>
                                 </Col>
@@ -138,7 +138,7 @@ class Contact extends Component {
                                             onChange = {this.handleInputChange}
                                             onBlur = {this.handleBlur('lastname')}
                                             valid={errors.lastname === ''}
-                                            invalid={errors.lastname != ''}
+                                            invalid={errors.lastname !== ''}
                                             placeholder="Last Name" value={this.state.lastname} />
                                     <FormFeedback>{errors.lastname}</FormFeedback>
                                 </Col>
@@ -150,7 +150,7 @@ class Contact extends Component {
                                             onBlur = {this.handleBlur('telnum')}
                                             onChange = {this.handleInputChange}
                                             valid={errors.telnum === ''}
-                                            invalid={errors.telnum != ''}
+                                            invalid={errors.telnum !== ''}
                                             placeholder="Tel. Num" value={this.state.telnum} />
                                     <FormFeedback>{errors.telnum}</FormFeedback>
                                 </Col>
@@ -162,7 +162,7 @@ class Contact extends Component {
                                             onBlur = {this.handleBlur('email')}
                                             onChange = {this.handleInputChange}
                                             valid={errors.email === ''}
-                                            invalid={errors.email != ''}
+                                            invalid={errors.email !== ''}
                                             placeholder="Email" value={this.state.email} />
                                     <FormFeedback>{errors.email}</FormFeedback>
                                 </Col>
