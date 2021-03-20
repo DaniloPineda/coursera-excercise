@@ -24,7 +24,8 @@ function DishDetail(props){
                     <RenderDish dish={props.dish}/>                        
                 </div>
                 <div className="col-12 col-md-5 m-1">
-                    <RenderComments comments={props.comments} />
+                    <RenderComments comments={props.comments} addComment={props.addComment}
+                     dishId={props.dish.id}/>
                 </div>
             </div>
         </div>
@@ -44,7 +45,7 @@ const RenderDish = ({dish}) =>{
     );
 }
 
-const RenderComments= ({comments}) => {   
+const RenderComments= ({comments, addComment, dishId}) => {   
     const commentsList = comments.map(comment =>{ 
         return(
             <div key={comment.id} className="col-12 pt-3"> 
@@ -61,7 +62,7 @@ const RenderComments= ({comments}) => {
                 <div className="unstyled-list">
                     {commentsList}
                 </div>
-                <CommentForm />
+                <CommentForm dishId={dishId} addComment={addComment}/>
             </>
         )                
     }
@@ -69,6 +70,9 @@ const RenderComments= ({comments}) => {
     return(<div></div>)
 }
 
+const required = (val) => {    
+    return val !== undefined && val !== "";
+}
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => (val) && (val.length >= len);
 class CommentForm extends Component {
@@ -81,17 +85,17 @@ class CommentForm extends Component {
         }
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);        
     }
 
     toggleNav = () => this.setState({isNavOpen: !this.state.isNavOpen})
     
     toggleModal = () => this.setState({isModalOopen: !this.state.isModalOopen})
+    
 
     handleSubmit = (values) => {
         this.toggleModal();
-        console.log("Current state is: " + JSON.stringify(values));
-        alert("Current state is: " + JSON.stringify(values));
+        this.props.addComment(this.props.dishId, parseInt(values.rating), values.author, values.comment);
     }
 
     render(){
@@ -109,13 +113,19 @@ class CommentForm extends Component {
                             <FormGroup className="form-group">
                                 <Label htmlFor="rating">Rating</Label>                     
                                 <Control.select model=".rating" name="rating"
-                                    className="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    className="form-control" type="number"
+                                    validators={{required}}>
+                                    <option selected value="">-- Select --</option>
+                                    <option value="1">1</option>            
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
                                 </Control.select>
+                                <Errors className="text-danger" model=".rating" show="touched"
+                                    messages={{                                                                                
+                                        required: "Must select a range"
+                                    }}/>
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="author">Your Name</Label>
