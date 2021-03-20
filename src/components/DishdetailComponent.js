@@ -3,10 +3,29 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
     Modal, ModalHeader, ModalBody, FormGroup,Label } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent'
 
 
 function DishDetail(props){        
-    if(props.dish != null)
+    if(props.isLoading){
+        return (
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        )
+    }
+    else if (props.errMess){
+        return(
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        )
+    }
+    else if(props.dish != null)
     return(
         <div className="container">
                 <div className="row">
@@ -81,7 +100,7 @@ class CommentForm extends Component {
         super(props);
         this.state = {
             isNavOpen: false,
-            isModalOopen: false
+            isModalOpen: false
         }
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
@@ -90,7 +109,7 @@ class CommentForm extends Component {
 
     toggleNav = () => this.setState({isNavOpen: !this.state.isNavOpen})
     
-    toggleModal = () => this.setState({isModalOopen: !this.state.isModalOopen})
+    toggleModal = () => this.setState({isModalOpen: !this.state.isModalOpen})
     
 
     handleSubmit = (values) => {
@@ -106,14 +125,14 @@ class CommentForm extends Component {
                         <span className="fa fa-pencil fa-lg"></span>{' '}Submit Comment
                     </Button>
                 </div>
-                <Modal isOpen={this.state.isModalOopen} toggle={this.toggleModal}>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
                         <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
                             <FormGroup className="form-group">
                                 <Label htmlFor="rating">Rating</Label>                     
                                 <Control.select model=".rating" name="rating"
-                                    className="form-control" type="number"
+                                    className="form-control"
                                     validators={{required}}>
                                     <option selected value="">-- Select --</option>
                                     <option value="1">1</option>            

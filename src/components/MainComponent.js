@@ -9,7 +9,7 @@ import DishDetail from './DishdetailComponent';
 import { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment } from '../redux/ActionCreator';
+import { addComment, fetchDishes } from '../redux/ActionCreator';
 
 const mapStateToProps = state => {
   return{
@@ -21,17 +21,24 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addComment : (dishId, rating, author, comment)  => dispatch(addComment(dishId, rating, author, comment))
+  addComment : (dishId, rating, author, comment)  => dispatch(addComment(dishId, rating, author, comment)),
+  fetchDishes : () => { dispatch(fetchDishes())}
 })
 class Main extends Component {
 
   onDishSelect = (dishId) => this.setState( {selectedDish: dishId });
   
+  componentDidMount(){
+    this.props.fetchDishes();
+  }
+
   render() {
     const HomePage = () =>{
       return(
         <Home
-          dish={this.props.dishes.filter(d => d.featured)[0]}
+          dish={this.props.dishes.dishes.filter(d => d.featured)[0]}
+          dishesLoading={this.props.dishes.isLoading}
+          dishesErrMess={this.props.dishes.errMess}
           promotion ={this.props.promotions.filter(p => p.featured)[0]}
           leader ={this.props.leaders.filter(l => l.featured)[0]}
         />
@@ -41,7 +48,9 @@ class Main extends Component {
     const DishWithId = ({match}) => {
       return(
         <DishDetail 
-          dish={this.props.dishes.filter(d => d.id === parseInt(match.params.dishId,10))[0]} 
+          dish={this.props.dishes.dishes.filter(d => d.id === parseInt(match.params.dishId,10))[0]} 
+          isLoading={this.props.dishes.isLoading}
+          errMess={this.props.dishes.errMess}
           comments={this.props.comments.filter(c => c.dishId === parseInt(match.params.dishId,10))}
           addComment = {this.props.addComment}
         />
