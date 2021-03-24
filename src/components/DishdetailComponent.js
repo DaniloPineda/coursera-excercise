@@ -55,9 +55,7 @@ function DishDetail(props){
 
 const RenderDish = ({dish}) =>{
     return(
-        <FadeTransform in transformProps={{
-            exitTransform:'scale(0.5) translateY(-50%)'
-    }}>
+        <FadeTransform in >
             <Card>
                 <CardImg src={baseUrl + dish.image} alt={dish.name} />
                 <CardBody>
